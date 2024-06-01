@@ -9,12 +9,15 @@ import { AuthSocialButton } from './auth-social-button';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 import { toast } from 'react-hot-toast';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 type Variant = 'LOGIN' | 'REGISTER';
 
 const AuthForm = () => {
   const [variant, setVariant] = useState<Variant>('LOGIN');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const toggleVariant = useCallback(() => {
     if (variant === 'LOGIN') {
@@ -42,6 +45,7 @@ const AuthForm = () => {
     if (variant === 'REGISTER') {
       axios
         .post('/api/register', data)
+        .then(() => signIn('credentials', { ...data }))
         .catch(() => {
           toast.error('Something went wrong!');
         })
@@ -49,18 +53,14 @@ const AuthForm = () => {
     }
 
     if (variant === 'LOGIN') {
-      signIn('credentials', {
-        ...data,
-        redirect: false,
-      })
-        .then((callback) => {
-          if (callback?.error) {
-            toast.error('Invalid credentials!');
-          }
-
-          if (callback?.ok) {
-            toast.success('Logged in!');
-          }
+      axios
+        .post('/api/login', data)
+        .then((response) => {
+          toast.success(response.data);
+          router.push(DEFAULT_LOGIN_REDIRECT);
+        })
+        .catch((error) => {
+          toast.error(error.response.data);
         })
         .finally(() => setIsLoading(false));
     }
@@ -97,6 +97,7 @@ const AuthForm = () => {
             register={register}
             errors={errors}
             disabled={isLoading}
+            required
           />
           <Input
             id="password"
@@ -105,8 +106,8 @@ const AuthForm = () => {
             register={register}
             errors={errors}
             disabled={isLoading}
+            required
           />
-
           <div>
             <Button disabled={isLoading} fullWidth type="submit">
               {variant === 'LOGIN' ? 'Sign in' : 'Register'}
