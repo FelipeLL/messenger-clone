@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import ToasterContext from '@/context/toaster-context';
 import './globals.css';
-import AuthContext from '@/context/auth-context';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,19 +12,20 @@ export const metadata: Metadata = {
   description: 'Created Felipe Ladino',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <AuthContext>
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className={inter.className}>
           <ToasterContext />
           {children}
-        </AuthContext>
-      </body>
-    </html>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
