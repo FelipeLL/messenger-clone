@@ -1,6 +1,29 @@
 import prisma from '@/libs/db';
 import { currentUser } from '@/libs/auth';
 
+export const getConversationById = async (conversationId: string) => {
+  try {
+    const user = await currentUser();
+
+    if (!user?.email) {
+      return null;
+    }
+
+    const conversation = await prisma.conversation.findUnique({
+      where: {
+        id: conversationId,
+      },
+      include: {
+        users: true,
+      },
+    });
+
+    return conversation;
+  } catch (error) {
+    return null;
+  }
+};
+
 export const getConversations = async () => {
   const user = await currentUser();
 
