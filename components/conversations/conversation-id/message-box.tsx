@@ -6,6 +6,8 @@ import { Avatar } from '@/components/avatar';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { FullMessageType } from '@/types';
 import Image from 'next/image';
+import { useState } from 'react';
+import { ImageModal } from './image-modal';
 
 interface MessageBoxProps {
   data: FullMessageType;
@@ -14,6 +16,7 @@ interface MessageBoxProps {
 
 export const MessageBox = ({ data, isLast }: MessageBoxProps) => {
   const currentUser = useCurrentUser();
+  const [imageModalOpen, setImageModalOpen] = useState(false);
 
   const isOwn = currentUser?.email === data?.sender?.email;
   const seenList = (data.seen || [])
@@ -44,6 +47,7 @@ export const MessageBox = ({ data, isLast }: MessageBoxProps) => {
           <div className="text-xs text-gray-400">{format(new Date(data.createdAt), 'p')}</div>
         </div>
         <div className={message}>
+          <ImageModal src={data.image} isOpen={imageModalOpen} onClose={() => setImageModalOpen(false)} />
           {data.image ? (
             <Image
               alt="Image"
@@ -51,6 +55,7 @@ export const MessageBox = ({ data, isLast }: MessageBoxProps) => {
               width="288"
               src={data.image}
               className="object-cover cursor-pointer hover:scale-110 transition translate"
+              onClick={() => setImageModalOpen(true)}
             />
           ) : (
             <div>{data.body}</div>

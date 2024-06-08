@@ -9,6 +9,7 @@ import { FullConversationType } from '@/types';
 import { useOtherUser } from '@/hooks/use-other-user';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { Avatar } from '../avatar';
+import { AvatarGroup } from '../avatar-group';
 
 interface ConversationBoxProps {
   data: FullConversationType;
@@ -68,7 +69,7 @@ export const ConversationBox = ({ data, selected }: ConversationBoxProps) => {
       )}
       onClick={handleClick}
     >
-      <Avatar user={otherUser} />
+      {data.isGroup ? <AvatarGroup users={data.users} /> : <Avatar user={otherUser} />}
 
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
