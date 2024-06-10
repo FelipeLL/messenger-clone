@@ -37,7 +37,7 @@ export const ConfirmModal = ({ isOpen, onClose }: ConfirmModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="sm:flex sm:items-start">
-        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+        <div className="mt-4 mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10 sm:mt-0">
           <FiAlertTriangle className="h-6 w-6 text-red-600" />
         </div>
         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
@@ -51,7 +51,7 @@ export const ConfirmModal = ({ isOpen, onClose }: ConfirmModalProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+      <div className="flex flex-row-reverse mt-5 sm:mt-4">
         <Button disabled={isLoading} danger onClick={onDelete}>
           Delete
         </Button>
