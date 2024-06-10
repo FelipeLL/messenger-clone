@@ -58,7 +58,7 @@ bun dev
 - Image upload
 
 ## Demo
-Check out the live demo [here](https://www.youtube.com)
+Check out the live demo [here](https://messenger-x-clone.vercel.app)
 
 ## Technologies Used
 - Next.js 14
